@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    testImplementation("io.github.bonigarcia:webdrivermanager:4.0.0")
+    testImplementation ('net.lightbody.bmp:browsermob-core:2.1.5')
+            { exclude module: 'selenium' }
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.6.0'
+}
+
+test {
+    useJUnitPlatform()
+    maxParallelForks = 4
+}
