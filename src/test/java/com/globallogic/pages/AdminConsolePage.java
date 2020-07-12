@@ -21,13 +21,6 @@ public class AdminConsolePage extends Page {
         return this;
     }
 
-    public Set<String> getCustomersIds() {
-        driver.get(BaseUrl + "/admin/?app=customers&doc=customers");
-        return driver.findElements(By.cssSelector("table.data-table tbody > tr")).stream()
-                .map(e -> e.findElements(By.tagName("td")).get(2).getText())
-                .collect(toSet());
-    }
-
     public AdminConsolePage performLogin() {
         if (driver.findElements(By.id("box-login")).size() > 0) {
             driver.findElement(By.name("username")).sendKeys("admin");
@@ -58,10 +51,4 @@ public class AdminConsolePage extends Page {
     public void openMenuItem(String menuItem) {
         driver.findElement(By.xpath("//ul[@id='box-apps-menu']//span[text()='"+menuItem+"']")).click();
     }
-
-   /* public boolean isCustomerPresent(Customer customer) {
-        return driver.findElements(By.cssSelector("table.data-table tbody > tr")).stream()
-                .map(e -> e.findElements(By.tagName("td")).get(3).getText())
-                .collect(toSet()).contains(customer.getEmail());
-    }*/
 }

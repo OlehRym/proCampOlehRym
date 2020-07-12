@@ -2,17 +2,17 @@ package com.globallogic.application;
 
 
 import com.globallogic.listeners.Listener;
-import com.globallogic.pages.AdminConsolePage;
-import com.globallogic.pages.CountryPage;
+import com.globallogic.pages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -24,16 +24,26 @@ public class Application {
 
     private AdminConsolePage adminPage;
     private CountryPage countryPage;
+    private MainShopPage shopPage;
+    private ProductPage productPage;
+    private CheckoutPage checkoutPage;
+    private CatalogPage catalogPage;
 
     public Application() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "normal");
+        driver = new ChromeDriver(capabilities);
         edr = new EventFiringWebDriver(driver);
         edr.register(new Listener());
         wait = new WebDriverWait(edr, 5);
 
         adminPage = new AdminConsolePage(edr, BaseUrl);
-        countryPage = new CountryPage(edr,BaseUrl);
+        countryPage = new CountryPage(edr, BaseUrl);
+        shopPage = new MainShopPage(edr, BaseUrl);
+        productPage = new ProductPage(edr, BaseUrl);
+        checkoutPage = new CheckoutPage(edr, BaseUrl);
+        catalogPage = new CatalogPage(edr, BaseUrl);
     }
 
     public void quit() {
@@ -77,31 +87,7 @@ public class Application {
         return countryPage.getElementExternalLink();
     }
 
-    public ExpectedCondition<String> anyWindowOtherThan(Set<String> windows) {
-
-        return new ExpectedCondition<String>() {
-            public String apply(WebDriver input) {
-                Set<String> handles = driver.getWindowHandles();
-                handles.removeAll(windows);
-                return handles.size() > 0 ? handles.iterator().next() : null;
-            }
-        };
-    }
-
-    public String getWindowHandle() {
-
-        String currentW = edr.getWindowHandle();
-        return currentW;
-    }
-
-    public Set<String> getWindowHandles() {
-        return edr.getWindowHandles();
-    }
-
-    public void switchToNewWindow(String newW) {
-        edr.switchTo().window(newW);
-    }
-    public WebDriver getDriver(){
+    public WebDriver getDriver() {
         return edr;
     }
 
@@ -133,5 +119,37 @@ public class Application {
 
     public Set<String> getMainWindowHandles() {
         return edr.getWindowHandles();
+    }
+
+    public void addProductToCart(int countItemInCart) {
+        for (int i = 0; i < countItemInCart; i++) {
+            int countItems = i + 1;
+            shopPage.open().chooseFirstProduct();
+            productPage.addToCart(countItems);
+        }
+    }
+
+    public void removalProductOneByOne() {
+        checkoutPage.removalProductOneByOne();
+
+    }
+
+    public String getProductInCart() {
+        return checkoutPage.getProductInCart();
+    }
+
+    public void addNewProduct() {
+        catalogPage.addNewProduct();
+    }
+
+    public int getCountItems() {
+        openAdminSideMenu();
+        adminPage.openMenuItem("Catalog");
+        return catalogPage.getCountItems();
+    }
+
+    public void deleteItem() {
+        catalogPage.deleteItem();
+
     }
 }
