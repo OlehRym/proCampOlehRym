@@ -31,12 +31,12 @@ public class CatalogPage extends Page {
         Select drpSupplier = new Select(driver.findElement(By.name("supplier_id")));
         drpSupplier.selectByIndex(0);
 //load photo
-       /* ClassLoader classLoader = getClass().getClassLoader();
+        ClassLoader classLoader = getClass().getClassLoader();
         System.out.println("Classloader =" + classLoader);
         File file = new File(classLoader
-                .getResource("src/test/java/com/globallogic/file/example.jpg")
+                .getResource("example.jpg")
                 .getFile());
-        driver.findElement(By.name("new_images[]")).sendKeys(file.getAbsolutePath());*/
+        driver.findElement(By.name("new_images[]")).sendKeys(file.getAbsolutePath());
 
         driver.findElement(By.xpath("//a[text()='Information']")).click();
         driver.findElement(By.name("short_description[en]")).sendKeys("short description");
