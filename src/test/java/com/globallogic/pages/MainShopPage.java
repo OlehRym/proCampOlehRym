@@ -1,7 +1,11 @@
 package com.globallogic.pages;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 
 public class MainShopPage extends Page {
@@ -16,8 +20,8 @@ public class MainShopPage extends Page {
         return this;
     }
 
-    public void chooseFirstProduct() {
-        driver.findElements(By.xpath("//div[@class='listing products']//a")).get(0).click();
-
+    public void сhooseRandomProduct() {
+        List<WebElement> products = driver.findElements(By.xpath("//div[@class='listing products']//a"));
+        products.get(RandomUtils.nextInt(0,products.size()-1)).click();
     }
 }

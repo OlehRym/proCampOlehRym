@@ -122,11 +122,12 @@ public class Application {
     }
 
     public void addProductToCart(int countItemInCart) {
-        for (int i = 0; i < countItemInCart; i++) {
-            int countItems = i + 1;
-            shopPage.open().chooseFirstProduct();
-            productPage.addToCart(countItems);
+        int countItems=0 ;
+        while(countItems<countItemInCart){
+            shopPage.open().сhooseRandomProduct();
+            countItems= productPage.addToCart(countItems);
         }
+        productPage.openCart();
     }
 
     public void removalProductOneByOne() {
